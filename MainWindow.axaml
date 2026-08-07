@@ -1,0 +1,101 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="VisionInspectionDemo.MainWindow"
+        Title="OpenCV 비전 검사 데모"
+        Width="1400"
+        Height="820"
+        MinWidth="1050"
+        MinHeight="650"
+        DragDrop.AllowDrop="True"
+        DragDrop.DragOver="Window_DragOver"
+        DragDrop.Drop="Window_Drop"
+        WindowStartupLocation="CenterScreen">
+  <Grid Margin="16" RowDefinitions="Auto,*,Auto">
+    <WrapPanel Grid.Row="0" Margin="0,0,0,14" VerticalAlignment="Center">
+      <Button Content="이미지 불러오기" Click="LoadImage_Click" Margin="0,0,8,0" />
+      <Button Content="검사 실행" Click="Inspect_Click" Margin="0,0,20,0" />
+      <TextBlock Text="또는 Finder에서 이미지를 창으로 드래그"
+                 VerticalAlignment="Center" Foreground="#777777" Margin="0,0,20,0" />
+
+      <TextBlock Text="검출 방식" VerticalAlignment="Center" Margin="0,0,6,0" />
+      <ComboBox x:Name="DetectionModeInput" SelectedIndex="0" Width="190" Margin="0,0,16,0">
+        <ComboBoxItem Content="Yellow HSV (WM-811K)" />
+        <ComboBoxItem Content="Gray Threshold" />
+      </ComboBox>
+
+      <TextBlock Text="Gray Threshold" VerticalAlignment="Center" Margin="0,0,6,0" />
+      <NumericUpDown x:Name="ThresholdInput" Minimum="0" Maximum="255" Value="170"
+                     Width="90" Margin="0,0,16,0" />
+
+      <TextBlock Text="HSV H 범위" VerticalAlignment="Center" Margin="0,0,6,0" />
+      <NumericUpDown x:Name="HueMinimumInput" Minimum="0" Maximum="179" Value="20"
+                     Width="75" Margin="0,0,4,0" />
+      <TextBlock Text="~" VerticalAlignment="Center" Margin="0,0,4,0" />
+      <NumericUpDown x:Name="HueMaximumInput" Minimum="0" Maximum="179" Value="40"
+                     Width="75" Margin="0,0,12,0" />
+
+      <TextBlock Text="S 최소" VerticalAlignment="Center" Margin="0,0,6,0" />
+      <NumericUpDown x:Name="SaturationMinimumInput" Minimum="0" Maximum="255" Value="100"
+                     Width="80" Margin="0,0,12,0" />
+
+      <TextBlock Text="V 최소" VerticalAlignment="Center" Margin="0,0,6,0" />
+      <NumericUpDown x:Name="ValueMinimumInput" Minimum="0" Maximum="255" Value="100"
+                     Width="80" Margin="0,0,16,0" />
+
+      <TextBlock Text="최소 결함 면적(px²)" VerticalAlignment="Center" Margin="0,0,6,0" />
+      <NumericUpDown x:Name="MinimumAreaInput" Minimum="1" Maximum="100000" Value="5"
+                     Width="100" Margin="0,0,16,0" />
+
+      <TextBlock Text="FAIL 결함 수" VerticalAlignment="Center" Margin="0,0,6,0" />
+      <NumericUpDown x:Name="FailDefectCountInput" Minimum="1" Maximum="100000" Value="20"
+                     Width="100" Margin="0,0,16,0" />
+
+      <TextBlock Text="FAIL 면적 비율(%)" VerticalAlignment="Center" Margin="0,0,6,0" />
+      <NumericUpDown x:Name="FailAreaRatioInput" Minimum="0" Maximum="100" Value="5"
+                     Width="90" Margin="0,0,16,0" />
+
+      <TextBlock Text="FAIL 최대 결함(px²)" VerticalAlignment="Center" Margin="0,0,6,0" />
+      <NumericUpDown x:Name="FailLargestAreaInput" Minimum="1" Maximum="10000000" Value="500"
+                     Width="110" Margin="0,0,16,0" />
+
+      <CheckBox x:Name="CircularRoiInput" Content="원형 ROI 사용" IsChecked="True"
+                VerticalAlignment="Center" />
+    </WrapPanel>
+
+    <Grid Grid.Row="1" ColumnDefinitions="*,*,*" ColumnSpacing="12">
+      <Grid Grid.Column="0" RowDefinitions="Auto,*">
+        <TextBlock Text="원본 / 결함 표시" FontSize="18" FontWeight="Bold"
+                   HorizontalAlignment="Center" Margin="0,0,0,8" />
+        <Border Grid.Row="1" Background="#1C1F24" CornerRadius="6" Padding="6">
+          <Image x:Name="OriginalView" Stretch="Uniform" />
+        </Border>
+      </Grid>
+
+      <Grid Grid.Column="1" RowDefinitions="Auto,*">
+        <TextBlock Text="Gray" FontSize="18" FontWeight="Bold"
+                   HorizontalAlignment="Center" Margin="0,0,0,8" />
+        <Border Grid.Row="1" Background="#1C1F24" CornerRadius="6" Padding="6">
+          <Image x:Name="GrayView" Stretch="Uniform" />
+        </Border>
+      </Grid>
+
+      <Grid Grid.Column="2" RowDefinitions="Auto,*">
+        <TextBlock Text="결함 Mask" FontSize="18" FontWeight="Bold"
+                   HorizontalAlignment="Center" Margin="0,0,0,8" />
+        <Border Grid.Row="1" Background="#1C1F24" CornerRadius="6" Padding="6">
+          <Image x:Name="BinaryView" Stretch="Uniform" />
+        </Border>
+      </Grid>
+    </Grid>
+
+    <Grid Grid.Row="2" Margin="12,16,12,0" ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+      <TextBlock x:Name="MetricsLabel" Text="결함 수: - | 전체 면적: - | 면적 비율: - | 최대 결함: -"
+                 FontSize="20" FontWeight="SemiBold" Foreground="#555555"
+                 VerticalAlignment="Center" />
+      <TextBlock x:Name="JudgmentLabel" Grid.Column="1" Text="READY" FontSize="34"
+                 FontWeight="Bold" Foreground="#666666" Margin="30,0,0,0" />
+      <TextBlock x:Name="ReasonLabel" Grid.Row="1" Grid.ColumnSpan="2" Text=""
+                 FontSize="15" Foreground="#777777" Margin="0,5,0,0" />
+    </Grid>
+  </Grid>
+</Window>
