@@ -1,0 +1,28 @@
+# .NET build outputs
+bin/
+obj/
+artifacts/
+
+# IDE and editor settings
+.vs/
+.idea/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Test and coverage outputs
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+# macOS metadata
+.DS_Store
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+*~
